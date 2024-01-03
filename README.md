@@ -1,1 +1,1 @@
-# chinese-study-frontend
+# chinese-study-app
