@@ -1,5 +1,5 @@
 # chinese-study-app
 
 TODO:
-* Think about / design the Chinese learning experience 
-  (List out current painpoints etc.)
+* Decide if we are going to store clips in the repo (too big???)
+* 
