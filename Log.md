@@ -1,4 +1,7 @@
 
+1/24/2024
+- Started designing the basic data structure for clips.  Created the first 1.5 clips (need to add Hanzi etc to the 2nd clip).  TODO: Make Prev/Next buttons navigate between cards.
+
 1/23/2024
 - Made basic "wireframe" (video plus, next button, previous button, and slider).  Wrote basic user story for the card "study loop"
 
