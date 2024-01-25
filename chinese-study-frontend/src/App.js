@@ -8,6 +8,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import React from "react"
 
 let data = [
   {
@@ -26,6 +27,14 @@ let data = [
     source: "Love O2O",
     learningLevel: 0
   },
+  {
+    clip: '/clips/clip3.mp4',
+    hanzi: "??????",
+    pinyin: "??????",
+    english: "???????",
+    source: "Love O2O",
+    learningLevel: 0
+  },
 ]
 
 
@@ -34,6 +43,7 @@ function BasicCard(props) {
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         { props.card.hanzi }
+        { props.card.english }
         <ReactPlayer
           url={ props.card.clip }
           controls={true}
@@ -45,8 +55,8 @@ function BasicCard(props) {
           valueLabelDisplay="auto" />
       </CardContent>
       <CardActions>
-        <Button variant="outlined">Prev Card</Button>
-        <Button variant="outlined">Next Card</Button>
+        <Button onClick={() => { props.setCardIndex(props.cardIndex - 1)}} variant="outlined">Prev Card</Button>
+        <Button onClick={() => { props.setCardIndex(props.cardIndex + 1)}} variant="outlined">Next Card</Button>
       </CardActions>
     </Card>
   );
@@ -54,14 +64,25 @@ function BasicCard(props) {
 
 
 function App() {
+  // Make a state variable to store the current card's index
+  const [cardIndex, setCardIndex] = React.useState(0)
+
   return (
     <div className="App">
       <header className="App-header">
-        <BasicCard card={ data[0] } />
-        <BasicCard card={ data[1] } />
+        <BasicCard card={data[cardIndex]}
+                   setCardIndex={setCardIndex}
+                   cardIndex={cardIndex}
+        />
       </header>
     </div>
   );
+}
+
+function AllCards() {
+  return data.map((x) => {
+    return <BasicCard card={x} />
+  })
 }
 
 
