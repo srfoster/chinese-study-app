@@ -1,4 +1,7 @@
 
+1/30/2024
+- Refactored on the asl-experiment branch.  Converting mp4 command: ffmpeg -i input.avi -s 720x480 -c:a copy output.mkv
+
 1/25/2024
 - Added current card to the React app state, and make the current card display.  Change the current card when you press Prev or Next.
 
