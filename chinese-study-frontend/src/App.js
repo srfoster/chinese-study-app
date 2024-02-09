@@ -13,21 +13,34 @@ import { useStopwatch } from 'react-timer-hook';
 import useWindowSize from 'react-use/lib/useWindowSize'
 import Confetti from 'react-confetti'
 
+/* 
+
+P - Palm orientation
+L - Location
+HS - Handshape
+M - Movement
+SS - Sentence Structure
+NMM - Non-manual markers
+SC - Sign choice
+
+*/
+
+
 let aslCards = [
   {
     clip: '/clips/asl/I-showed-up-and-no-one-here-incorrect2.mp4',
     correctClip: '/clips/asl/I-showed-up-and-no-one-here-correct2.mp4',
     type: "POA",
     english: "I showed up and no one was there",
-    options: ["PO","L", "HS", "M", "F"],
-    correctAnswer: 0,
+    options: ["PO","L", "HS", "M", "NMM", "SS"],
+    correctAnswer: 5,
   },
   {
     clip: '/clips/asl/I-showed-up-and-no-one-here-incorrect2.mp4',
     correctClip: '/clips/asl/I-showed-up-and-no-one-here-correct2.mp4',
     type: "POA",
     english: "I showed up and no one was there",
-    options: ["PO","L", "HS", "M", "F"],
+    options: ["PO","L", "HS", "M", "NMM", "SS"],
     correctAnswer: 0,
   },
 ]
@@ -85,6 +98,8 @@ function BasicChineseCard(props){
 }
 
 function POACard(props){
+  let [showCorrect, setShowCorrect] = React.useState(false)
+
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
