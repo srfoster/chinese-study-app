@@ -1,4 +1,16 @@
 
+2/14/2024
+- Added a shuffle button.  Added a sort by learning level.  Began a rough implementation of checking answers (todo: improve this)
+
+2/8/2024
+- Almost finished implementing User Story #1: user can study a deck of cards and set learning level.  TODO: Need to make data persist across page loads!
+
+2/6/2024
+- Fixed the bug where you can go past the last (or first) card.  Started to save the learning level, but this required moving card data into state variable.  But this caused the data variable to not be accessible, and broke our fix for the aforementioned bug.
+
+2/5/2024
+- Moved clip data from hardcoded variable in frontend code to a glitch-hosted backend, fetched in useEffect.
+
 1/25/2024
 - Added current card to the React app state, and make the current card display.  Change the current card when you press Prev or Next.
 
