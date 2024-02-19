@@ -1,19 +1,54 @@
-import logo from './logo.svg';
 import './App.css';
 import ReactPlayer from 'react-player'
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 import React from "react"
-import TextField from '@mui/material/TextField';
+import {HashRouter as Router, Routes, Route, Link} from "react-router-dom"
+import NavBar from "./NavBar" 
+import { useStopwatch } from 'react-timer-hook';
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
 
-let originalData = [
+/* 
+
+P - Palm orientation
+L - Location
+HS - Handshape
+M - Movement
+SS - Sentence Structure
+NMM - Non-manual markers
+SC - Sign choice
+
+*/
+
+
+let aslCards = [
+  {
+    clip: '/clips/asl/I-showed-up-and-no-one-here-incorrect2.mp4',
+    correctClip: '/clips/asl/I-showed-up-and-no-one-here-correct2.mp4',
+    type: "POA",
+    english: "I showed up and no one was there",
+    options: ["PO","L", "HS", "M", "NMM", "SS"],
+    correctAnswer: 5,
+  },
+  {
+    clip: '/clips/asl/I-showed-up-and-no-one-here-incorrect2.mp4',
+    correctClip: '/clips/asl/I-showed-up-and-no-one-here-correct2.mp4',
+    type: "POA",
+    english: "I showed up and no one was there",
+    options: ["PO","L", "HS", "M", "NMM", "SS"],
+    correctAnswer: 0,
+  },
+]
+
+let chineseCards = [
   {
     clip: '/clips/clip1.mp4',
+    type: "basic-chinese",
     hanzi: "你要小心啊",
     pinyin: "nǐ yào xiǎoxīn a",
     english: "You have to be careful",
@@ -22,6 +57,7 @@ let originalData = [
   },
   {
     clip: '/clips/clip2.mp4',
+    type: "basic-chinese",
     hanzi: "??????",
     pinyin: "??????",
     english: "???????",
@@ -30,6 +66,7 @@ let originalData = [
   },
   {
     clip: '/clips/clip3.mp4',
+    type: "basic-chinese",
     hanzi: "??????",
     pinyin: "??????",
     english: "???????",
@@ -38,10 +75,7 @@ let originalData = [
   },
 ]
 
-
-function BasicCard(props) {
-  let [userAnswer, setUserAnswer] = React.useState("")
-
+function BasicChineseCard(props){
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
@@ -53,115 +87,152 @@ function BasicCard(props) {
         />
         <Slider
           min={0} max={5} step={1}
-          value={props.card.learningLevel}
-          onChange={(event, value, activeThumb) => {
-            console.log("Slider changed", value)
-
-            //Want to change the learning level slider for the current card object
-
-            //Need to pass in the same cards as were originally in data, but with the learning level changed for the current card object
-
-            //props.setData("hello world")
-            //props.setData([])
-            props.setData(props.data.map((x) => {
-              if (x === props.card) {
-                return {...x, learningLevel: value}
-              } else {
-                return x
-              }
-            }))
-
-          }}    
+          defaultValue={0}
           aria-label="Default"
-          valueLabelDisplay="on" />
+          valueLabelDisplay="auto" />
       </CardContent>
       <CardActions>
-        <TextField id="outlined-basic" label="Outlined" variant="outlined"
-           onChange={(event) => setUserAnswer(event.target.value)} 
-        />
-        <Button onClick={() => { 
-          if (userAnswer === props.card.hanzi) {
-            alert("Correct!")
-          } else {
-            alert("Incorrect")
-          }
-        } } variant="outlined">Check Answer</Button>
-
-        <Button onClick={() => {
-          if (props.cardIndex === 0) {
-            props.setCardIndex(props.data.length - 1)
-          } else {
-            props.setCardIndex(props.cardIndex - 1)
-          }
-        }} variant="outlined">Prev Card</Button>
-
-        <Button onClick={() => {
-          if (props.cardIndex === props.data.length - 1) {
-            props.setCardIndex(0)
-          } else {
-            props.setCardIndex(props.cardIndex + 1)
-          }
-        }} variant="outlined">Next Card</Button>
       </CardActions>
     </Card>
   );
 }
 
-
-function App() {
-  // Make a state variable to store the current card's index
-  const [cardIndex, setCardIndex] = React.useState(0)
-  const [cards, setCards]           = React.useState(originalData)
+function POACard(props){
+  let [showCorrect, setShowCorrect] = React.useState(false)
 
   return (
-    <div className="App">
-      <header className="App-header">
-        { cardIndex + 1 } of { cards.length}
-        {<BasicCard
-          card={cards[cardIndex]}
-          setCardIndex={setCardIndex}
-          cardIndex={cardIndex}
-          data={cards}
-          setData={setCards}
-          />}
-        <Button onClick={() => { 
-          setCards([...shuffle(cards)])
-          setCardIndex(0)
-        }} variant="outlined">Shuffle</Button>
-
-        <Button onClick={() => { 
-          setCards([...sortByLearningLevel(cards)])
-          setCardIndex(0)
-        }} variant="outlined">Sort by Learning Level</Button>
-
-      </header>
-    </div>
+    <Card sx={{ minWidth: 275 }}>
+      <CardContent>
+        {props.card.english}
+        <ReactPlayer
+          url={ props.card.clip }
+          controls={true}
+        />
+      </CardContent>
+      <CardActions>
+        {props.card.options.map((x,i)=>{
+          return <Button onClick={()=>{
+            if(i === props.card.correctAnswer){
+              props.gotItRight()
+            }
+          }}>{x}</Button>
+        })}
+      </CardActions>
+    </Card>
   );
 }
 
-// Takes a list of cards and returns a list of cards sorted by learning level
-function sortByLearningLevel(cards) {
-  return cards.sort((a, b) => {
-    return a.learningLevel - b.learningLevel
-  })  
+function BasicCard(props) {
+  switch(props.card.type){
+      case "basic-chinese":
+        return <BasicChineseCard {...props} />
+      case "POA":
+        return <POACard {...props} />
+  }
 }
 
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+
+export default function App() {
+  return (
+    <>
+      <Router>
+        <NavBar />
+        <Container maxWidth="md" sx={{pt: 2}}>
+          <Routes>
+            <Route path="/" element={<h1>Welcome.  Use the links above to pick a language.</h1>} />} />
+            <Route path="/chinese" element={<Deck cards={chineseCards} startTime={new Date()} />} />
+            <Route path="/asl" element={<Deck cards={aslCards} startTime={new Date()} />} />
+          </Routes>
+        </Container>
+      </Router>    
+    </>
+  );
+}
+
+
+function Deck(props){
+  // Make a state variable to store the current card's index
+  const [cardIndex, setCardIndex] = React.useState(0)
+  const [currentCorrect, setCurrentCorrect] = React.useState(false)
+
+  React.useEffect(()=>{
+    setCardIndex(0)
+  },
+  [props.startTime])
+
+  const gotItRight = ()=>{
+    setCurrentCorrect(true)
   }
 
-  return array;
+  const prev = ()=>{
+    if(cardIndex - 1 >= 0){
+      setCardIndex(cardIndex - 1)
+      setCurrentCorrect(false)
+    }
+  }
+
+  const next = ()=>{
+    if(cardIndex + 1 < props.cards.length){
+      setCardIndex(cardIndex + 1)
+      setCurrentCorrect(false)
+    }
+  }
+
+  return <>
+    <Gamification startTime={props.startTime} currentCorrect={currentCorrect} />
+    {props.cards[cardIndex] && <BasicCard card={props.cards[cardIndex]}
+                    gotItRight={gotItRight}
+                    setCardIndex={setCardIndex}
+                    cardIndex={cardIndex}
+        />}
+     <Button onClick={() => { prev() }} variant="outlined">Prev Card</Button>
+     <Button onClick={() => { next()}} variant="outlined">Next Card</Button>
+  </>
 }
 
-/*
-function AllCards() {
-  return data.map((x) => {
+function Gamification(props){
+  const {
+    totalSeconds,
+    seconds,
+    minutes,
+    hours,
+    days,
+    isRunning,
+    start,
+    pause,
+    reset,
+  } = useStopwatch({ autoStart: true });
+
+  React.useEffect(()=>{
+    reset() 
+  },
+  [props.startTime])
+
+
+  return (
+    <div style={{textAlign: 'center'}}>
+        {props.currentCorrect && <MyConfetti />}
+        {props.currentCorrect && "You got it!"}
+        <div>{seconds}</div>
+    </div>
+  );
+ 
+}
+
+function AllCards(props) {
+  return props.cards.map((x) => {
     return <BasicCard card={x} />
   })
 }
-*/
 
 
-export default App;
+let MyConfetti = () => {
+  const { width, height } = useWindowSize()
+  return (
+    <Confetti
+      width={width}
+      height={height}
+    />
+  )
+}
+
