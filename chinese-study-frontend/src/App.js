@@ -28,20 +28,28 @@ SC - Sign choice
 
 let aslCards = [
   {
-    clip: '/clips/asl/I-showed-up-and-no-one-here-incorrect2.mp4',
-    correctClip: '/clips/asl/I-showed-up-and-no-one-here-correct2.mp4',
+    clip: '/clips/asl/hello-your-name-what.incorrect.mp4',
+    correctClip: '/clips/asl/hello-your-name-what.correct.mp4',
     type: "POA",
-    english: "I showed up and no one was there",
-    options: ["PO","L", "HS", "M", "NMM", "SS"],
+    english: "Hello, what's your name?",
+    options: ["PO","L", "HS", "M", "NMM", "SS", "SC"],
     correctAnswer: 5,
   },
   {
-    clip: '/clips/asl/I-showed-up-and-no-one-here-incorrect2.mp4',
-    correctClip: '/clips/asl/I-showed-up-and-no-one-here-correct2.mp4',
+    clip: '/clips/asl/i-buy-coffee-starbucks.incorrect.mp4',
+    correctClip: '/clips/asl/i-buy-coffee-starbucks.correct.mp4',
     type: "POA",
-    english: "I showed up and no one was there",
-    options: ["PO","L", "HS", "M", "NMM", "SS"],
-    correctAnswer: 0,
+    english: "I buy coffee at Starbucks",
+    options: ["PO","L", "HS", "M", "NMM", "SS", "SC"],
+    correctAnswer: 2,
+  },
+  {
+    clip: '/clips/asl/he-will-go-ferry.incorrect.mp4',
+    correctClip: '/clips/asl/he-will-go-ferry.correct.mp4',
+    type: "POA",
+    english: "He will take the ferry",
+    options: ["PO","L", "HS", "M", "NMM", "SS", "SC"],
+    correctAnswer: 6,
   },
 ]
 
