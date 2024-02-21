@@ -10,6 +10,9 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import React from "react"
 import TextField from '@mui/material/TextField';
+//import { useLocalStorage } from "@uidotdev/usehooks";
+//import { useLocalStorage } from 'usehooks-ts'
+import { useLocalStorage } from 'react-use';
 
 let originalData = [
   {
@@ -57,12 +60,6 @@ function BasicCard(props) {
           onChange={(event, value, activeThumb) => {
             console.log("Slider changed", value)
 
-            //Want to change the learning level slider for the current card object
-
-            //Need to pass in the same cards as were originally in data, but with the learning level changed for the current card object
-
-            //props.setData("hello world")
-            //props.setData([])
             props.setData(props.data.map((x) => {
               if (x === props.card) {
                 return {...x, learningLevel: value}
@@ -111,7 +108,8 @@ function BasicCard(props) {
 function App() {
   // Make a state variable to store the current card's index
   const [cardIndex, setCardIndex] = React.useState(0)
-  const [cards, setCards]           = React.useState(originalData)
+//  const [cards, setCards]         = React.useState(originalData)
+  const [cards, setCards] = useLocalStorage("cards", originalData)
 
   return (
     <div className="App">
@@ -154,14 +152,6 @@ function shuffle(array) {
 
   return array;
 }
-
-/*
-function AllCards() {
-  return data.map((x) => {
-    return <BasicCard card={x} />
-  })
-}
-*/
 
 
 export default App;
