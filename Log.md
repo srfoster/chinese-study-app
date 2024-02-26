@@ -1,5 +1,8 @@
 
 2/14/2024
+- Made data persistent (useLocalStorage).
+
+2/14/2024
 - Added a shuffle button.  Added a sort by learning level.  Began a rough implementation of checking answers (todo: improve this)
 
 2/8/2024
